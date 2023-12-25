@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../controllers/controllers.dart';
+import '../../../../controllers/controllers.dart';
 
 class AppearancePage extends StatefulWidget {
   const AppearancePage({
@@ -17,21 +17,26 @@ class AppearancePage extends StatefulWidget {
 }
 
 class _AppearancePageState extends State<AppearancePage> {
-  ThemeMode theme = ThemeMode.system;
+  late ThemeMode theme;
+
+  @override
+  initState() {
+    super.initState();
+    theme = widget.controller.themeMode;
+  }
 
   Future<void> _darkModeDialog() async => showDialog(
         context: context,
-        barrierDismissible: false,
         builder: (final BuildContext context) => AlertDialog(
           title: const Text('Dark mode'),
           content: SingleChildScrollView(
             child: ListBody(
-              children: <Widget>[
+              children: <ListTile>[
                 ListTile(
                   leading: Radio(
                     value: ThemeMode.system,
                     groupValue: theme,
-                    onChanged: (value) {
+                    onChanged: (final ThemeMode? value) {
                       setState(() {
                         theme = value as ThemeMode;
                       });
@@ -48,7 +53,7 @@ class _AppearancePageState extends State<AppearancePage> {
                   leading: Radio(
                     value: ThemeMode.light,
                     groupValue: theme,
-                    onChanged: (value) {
+                    onChanged: (final ThemeMode? value) {
                       setState(() {
                         theme = value as ThemeMode;
                       });
@@ -65,7 +70,7 @@ class _AppearancePageState extends State<AppearancePage> {
                   leading: Radio(
                     value: ThemeMode.dark,
                     groupValue: theme,
-                    onChanged: (value) {
+                    onChanged: (final ThemeMode? value) {
                       setState(() {
                         theme = value as ThemeMode;
                       });

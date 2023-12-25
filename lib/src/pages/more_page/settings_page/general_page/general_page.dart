@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../controllers/controllers.dart';
+import '../../../../controllers/controllers.dart';
+import '../../../../generated/l10n.dart';
 
 class GeneralPage extends StatefulWidget {
   const GeneralPage({
@@ -17,28 +18,34 @@ class GeneralPage extends StatefulWidget {
 }
 
 class _GeneralPageState extends State<GeneralPage> {
-  Locale locale = const Locale('en');
+  late Locale locale;
+
+  @override
+  initState() {
+    super.initState();
+    locale = widget.controller.locale;
+  }
+
   Future<void> _appLanguageDialog() async => showDialog(
         context: context,
-        barrierDismissible: false,
         builder: (final BuildContext context) => AlertDialog(
           title: const Text('App language'),
           content: SingleChildScrollView(
             child: ListBody(
-              children: <Widget>[
+              children: <ListTile>[
                 ListTile(
                   leading: Radio(
                     value: const Locale('en'),
                     groupValue: locale,
-                    onChanged: (value) {
+                    onChanged: (final Locale? value) {
                       setState(() {
                         locale = value as Locale;
                       });
                     },
                   ),
-                  title: const Text('English'),
+                  title: Text(L10n.of(context).english),
                   onTap: () {
-                    widget.controller.updateLanguage(const Locale('en'));
+                    widget.controller.updateLocale(const Locale('en'));
                     locale = const Locale('en');
                     Navigator.of(context).pop();
                   },
@@ -47,15 +54,15 @@ class _GeneralPageState extends State<GeneralPage> {
                   leading: Radio(
                     value: const Locale('am'),
                     groupValue: locale,
-                    onChanged: (value) {
+                    onChanged: (final Locale? value) {
                       setState(() {
                         locale = value as Locale;
                       });
                     },
                   ),
-                  title: const Text('Amharic'),
+                  title: Text(L10n.of(context).amharic),
                   onTap: () {
-                    widget.controller.updateLanguage(const Locale('am'));
+                    widget.controller.updateLocale(const Locale('am'));
                     locale = const Locale('am');
                     Navigator.of(context).pop();
                   },
@@ -64,15 +71,15 @@ class _GeneralPageState extends State<GeneralPage> {
                   leading: Radio(
                     value: const Locale('ti'),
                     groupValue: locale,
-                    onChanged: (value) {
+                    onChanged: (final Locale? value) {
                       setState(() {
                         locale = value as Locale;
                       });
                     },
                   ),
-                  title: const Text('Tigrigna'),
+                  title: Text(L10n.of(context).tigrigna),
                   onTap: () {
-                    widget.controller.updateLanguage(const Locale('ti'));
+                    widget.controller.updateLocale(const Locale('ti'));
                     locale = const Locale('ti');
                     Navigator.of(context).pop();
                   },
@@ -81,15 +88,15 @@ class _GeneralPageState extends State<GeneralPage> {
                   leading: Radio(
                     value: const Locale('or'),
                     groupValue: locale,
-                    onChanged: (value) {
+                    onChanged: (final Locale? value) {
                       setState(() {
                         locale = value as Locale;
                       });
                     },
                   ),
-                  title: const Text('Oromo'),
+                  title: Text(L10n.of(context).oromo),
                   onTap: () {
-                    widget.controller.updateLanguage(const Locale('or'));
+                    widget.controller.updateLocale(const Locale('or'));
                     locale = const Locale('or');
                     Navigator.of(context).pop();
                   },
@@ -98,15 +105,15 @@ class _GeneralPageState extends State<GeneralPage> {
                   leading: Radio(
                     value: const Locale('ar'),
                     groupValue: locale,
-                    onChanged: (value) {
+                    onChanged: (final Locale? value) {
                       setState(() {
                         locale = value as Locale;
                       });
                     },
                   ),
-                  title: const Text('Arabic'),
+                  title: Text(L10n.of(context).arabic),
                   onTap: () {
-                    widget.controller.updateLanguage(const Locale('ar'));
+                    widget.controller.updateLocale(const Locale('ar'));
                     locale = const Locale('ar');
                     Navigator.of(context).pop();
                   },
@@ -134,7 +141,7 @@ class _GeneralPageState extends State<GeneralPage> {
           children: <Widget>[
             ListTile(
               title: const Text('App language'),
-              subtitle: const Text('Deafult'),
+              subtitle: Text(locale.toString()),
               onTap: () => _appLanguageDialog(),
             ),
           ],

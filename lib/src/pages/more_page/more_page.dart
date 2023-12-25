@@ -37,7 +37,7 @@ class MorePage extends StatelessWidget {
               leading: const Icon(Icons.help_outline),
               title: Text(L10n.of(context).helpPage),
               onTap: () {
-                Navigator.pushNamed(context, '/about');
+                Navigator.pushNamed(context, '/help');
               },
             ),
           ],

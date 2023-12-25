@@ -1,58 +1,68 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// A service that stores and retrieves user settings.
-///
-/// By default, this class does not persist user settings. If you'd like to
-/// persist the user settings locally, use the shared_preferences package. If
-/// you'd like to store settings on a web server, use the http package.
-class SettingsService {
-  /// Loads the User's preferred ThemeMode from local or remote storage.
-  // Future<ThemeMode> themeMode() async => ThemeMode.light;
-  late SharedPreferences sharedPreferences;
+abstract class SettingsService {
+  Future<ThemeMode> themeMode();
+  Future<void> updateThemeMode(final ThemeMode theme);
 
-  /// Persists the user's preferred ThemeMode to local or remote storage.
+  Future<Locale> localeMode();
+  Future<void> updateLocaleMode(final Locale locale);
+}
+
+class SharedPrefSettingsService extends SettingsService {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  final Map<String, Locale> _localesMap = <String, Locale>{
+    'en': const Locale('en'),
+    'am': const Locale('am'),
+    'ti': const Locale('ti'),
+    'or': const Locale('or'),
+    'ar': const Locale('ar'),
+  };
+
+  final String _modeKey = 'theme_mode';
+  final String _localeKey = 'locale_mode';
+
+  @override
+  Future<Locale> localeMode() async {
+    String? locale = (await _prefs).getString(_localeKey);
+    return _localesMap[locale] ?? const Locale('en');
+  }
+
+  @override
+  Future<ThemeMode> themeMode() async {
+    String? theme = (await _prefs).getString(_modeKey);
+    // return _modesMap[theme] ?? ThemeMode.system;
+    return ThemeMode.values.byName(theme ?? ThemeMode.system.name);
+  }
+
+  @override
+  Future<void> updateLocaleMode(final Locale locale) async {
+    _prefs.then(
+      (final SharedPreferences prefs) =>
+          prefs.setString(_localeKey, locale.toString()),
+    );
+  }
+
+  @override
   Future<void> updateThemeMode(final ThemeMode theme) async {
-    // Use the shared_preferences package to persist settings locally or the
-    // http package to persist settings over the network.
-    sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString('theme', theme.toString());
+    _prefs.then(
+      (final SharedPreferences prefs) =>
+          prefs.setString(_modeKey, theme.toString().substring(10)),
+    );
   }
+}
 
-  Future<ThemeMode> getThemeMode() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    final String? theme = sharedPreferences.getString('theme');
-    if (theme == 'ThemeMode.system') {
-      return ThemeMode.system;
-    } else if (theme == 'ThemeMode.light') {
-      return ThemeMode.light;
-    } else if (theme == 'ThemeMode.dark') {
-      return ThemeMode.dark;
-    } else {
-      return ThemeMode.system;
-    }
-  }
+class DefaultSettingsService extends SettingsService {
+  @override
+  Future<Locale> localeMode() async => const Locale('en');
 
-  Future<void> updateLanguage(final Locale locale) async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString('language', locale.languageCode);
-  }
+  @override
+  Future<ThemeMode> themeMode() async => ThemeMode.system;
 
-  Future<Locale> getLanguage() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-    final String? language = sharedPreferences.getString('language');
-    if (language == 'en') {
-      return const Locale('en');
-    } else if (language == 'am') {
-      return const Locale('am');
-    } else if (language == 'ti') {
-      return const Locale('ti');
-    } else if (language == 'or') {
-      return const Locale('or');
-    } else if (language == 'ar') {
-      return const Locale('ar');
-    } else {
-      return const Locale('en');
-    }
-  }
+  @override
+  Future<void> updateLocaleMode(final Locale locale) async {}
+
+  @override
+  Future<void> updateThemeMode(final ThemeMode theme) async {}
 }

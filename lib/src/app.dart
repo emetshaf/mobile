@@ -5,6 +5,7 @@ import 'controllers/controllers.dart';
 import 'generated/l10n.dart';
 import 'pages/pages.dart';
 import 'utils/utils.dart';
+import 'localizations/ti_intl.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatefulWidget {
@@ -40,6 +41,7 @@ class _MyAppState extends State<MyApp> {
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
+            TiMaterialLocalizations.delegate,
           ],
           supportedLocales: L10n.delegate.supportedLocales,
 
@@ -101,6 +103,8 @@ class _MyAppState extends State<MyApp> {
                   return AppearancePage(
                     controller: widget.settingsController,
                   );
+                case HelpPage.routeName:
+                  return const HelpPage();
                 case SplashPage.routeName:
                 default:
                   return const SplashPage();

@@ -26,8 +26,8 @@ class SettingsController with ChangeNotifier {
   /// local database or the internet. The controller only knows it can load the
   /// settings from the service.
   Future<void> loadSettings() async {
-    _themeMode = await _settingsService.getThemeMode();
-    _locale = await _settingsService.getLanguage();
+    _themeMode = await _settingsService.themeMode();
+    _locale = await _settingsService.localeMode();
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
@@ -51,7 +51,7 @@ class SettingsController with ChangeNotifier {
     await _settingsService.updateThemeMode(newThemeMode);
   }
 
-  Future<void> updateLanguage(final Locale? newLocale) async {
+  Future<void> updateLocale(final Locale? newLocale) async {
     if (newLocale == null) return;
 
     // Do not perform any work if new and old ThemeMode are identical
@@ -65,6 +65,6 @@ class SettingsController with ChangeNotifier {
 
     // Persist the changes to a local database or the internet using the
     // SettingService.
-    await _settingsService.updateLanguage(newLocale);
+    await _settingsService.updateLocaleMode(newLocale);
   }
 }
