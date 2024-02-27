@@ -22,7 +22,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   # dart run intl_utils:generate
-  intl_utils: ^2.8.2
+  intl_utils: ^2.8.7
 
 flutter_intl:
   enabled: true
